@@ -1,14 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tilt+Neon&display=swap" rel="stylesheet">
 </head>
+
 <body>
   <script>
-    
+
+    //doc 만드는 함수
+    function CreateDoc(Tag, Parents, atrri, attrivalue) {
+      const element = document.createElement(Tag);
+      Parents.appendChild(element);
+      if (atrri !== undefined) {
+        element.setAttribute(atrri, attrivalue);
+      }
+    }
+
+    //스타일태그 함수
+    function Style(Tag, Width, Height, Margin, Padding) {
+      Tag.style.width = Width;
+      Tag.style.height = Height;
+      if (Margin !== undefined) {
+        Tag.style.margin = Margin;
+      }
+      if (Padding !== undefined) {
+        Tag.style.padding = Padding;
+      }
+    }
+
+    //배경함수
+    //배경이 지금 메인 사이즈보다 커지면, 저 cover 속성이 가로나 세로를 맞춰주는거라 비율상 사진이 안보이는 문제가 있음.
+    //딱 맞게 나올 방법 없을지 찾아보기.
+    function Background(Tag,Background,Size){
+      Tag.style.background = Background;
+      Tag.style.backgroundSize="cover";
+      Tag.style.backgroundPosition="center"
+    }
+
+    //디스플레이 태그 함수
+    function DisplayStyle(Tag, Display, Direction, Justify, Align, Wrap) {
+      Tag.style.display = Display;
+      if (Direction !== undefined) {
+        Tag.style.displayDirection = Direction;
+      }
+      if (Justify !== undefined) {
+        Tag.style.justifyContent = Justify;
+      }
+      if (Align !== undefined) {
+        Tag.style.alignItems = Align;
+      }
+      if (Wrap !== undefined) {
+        Tag.style.flexWrap = Wrap;
+      }
+    }
+
+    //랜덤함수
+    function mathrange(min, max) {
+      min = Math.ceil(min); //최소값 숫잔데 반올림.
+      max = Math.floor(max); //최대값 숫잔데 절사.
+      return Math.floor(Math.random() * (max - min)) + min;
+      //랜덤숫자*최대값-최소값 인 숫자인데 소수점은 절사
+      console.log(Math.floor(Math.random() * (max - min)) + min);
+    }
+
+    //폰트 공통이라 함수로 묶음.
+    function Font(Tag) {
+      Tag.style.fontFamily = "'Tilt Neon'"
+      Tag.style.fontSize = "50px"
+    }
+
+    //안에 들어갈 텍스트 배열->순서대로 넣을거라
+    const Intitial = ["💜", "💜", "I", "O", "A", "N", "N", "A"];
+
+    //안에 들어갈 사진들 배열만들기
+    const Ioanna = [];
+
+    //숫자말고 폴더안에 파일갯수를 셀순없나?
+    for (i = 0; i < 23; i++) {
+      Ioanna[i] = "(./photo/Ioanna" + [i] + ".jpg)"
+    }
+    // console.dir(Ioanna);
+    //배열 추가 확인.
+    //console.log(Ioanna.length) 갯수 콘솔 확인.
+
+    //body 스타일.
+    Style(document.body, "100vw", "100vh", "0", "0");
+
+    //main 생성 및 스타일
+    CreateDoc("main", document.body);
+    let Main = document.body.children[1];
+    Style(Main, "412px", "915px");
+    DisplayStyle(Main, "flex", "", "", "", "wrap");
+
+    //main 내부를 8등분해서 div 생성. div별로 안에 p태그도 추가 생성. 세부 스타일 지정.
+    for (i = 0; i < 8; i++) {
+      CreateDoc("div", Main);
+      Style(Main.children[i], "50%", "25%", "", "");
+      Background(Main.children[i],"#ECCEF5");
+      DisplayStyle(Main.children[i], "flex", "", "center", "center");
+      CreateDoc("p", Main.children[i])
+      Main.children[i].children[0].textContent = Intitial[i];
+      Font(Main.children[i].children[0]);
+
+      //누르면 변화하게 하고, 이벤트리스너를 넣어 사진 바뀌게 설정. 사진은 순서대로가 아닌 랜덤숫자로 나오게함.
+      let Switch = true;
+      Main.children[i].addEventListener("click", function () {
+        if(Switch===true){
+          Background(this,"url"+Ioanna[mathrange(0,Ioanna.length)]);
+          DisplayStyle(this.children[0],"none")
+          Switch=false;
+        }
+        else if(Switch===false){
+          Background(this,"#ECCEF5");
+          DisplayStyle(this.children[0],"")
+          Switch=true;
+        }
+      })
+    }
+
+
   </script>
 </body>
+
 </html>
